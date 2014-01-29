@@ -4,7 +4,6 @@ class SupplySite < ActiveRecord::Base
 
   belongs_to :site
   has_many :translinks, :dependent => :destroy
-#  accepts_nested_attributes_for :translinks
 
   def supply_site_codename
     self.site.codename

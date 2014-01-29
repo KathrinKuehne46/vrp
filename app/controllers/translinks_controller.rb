@@ -148,18 +148,7 @@ class TranslinksController < ApplicationController
       fi.close
       @translinks = Translink.all
 
-      #if File.exist?("Zielfunktionswert_v2.txt")
-      #  fi=File.open("Zielfunktionswert_v2.txt", "r")
-      #  line=fi.readline
-      #  fi.close
-      #  sa=line.split(" ")
-      #  @objective_function_value=sa[1]
-      #else
-      #  @objective_function_value=nil
-      #  flash.now[:not_available] = "Objective function value not found!!"
-      #end
       render "translinks/index"
-      #redirect_to translinks_url
 
     else
       flash.now[:not_available] = "Problem not solved!"
