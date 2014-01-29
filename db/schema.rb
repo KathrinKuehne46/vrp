@@ -11,7 +11,37 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131224111339) do
+ActiveRecord::Schema.define(:version => 20140124103354) do
+
+  create_table "demand_sites", :force => true do |t|
+    t.integer  "site_id"
+    t.float    "demand_quantity"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+  end
+
+  create_table "sites", :force => true do |t|
+    t.string   "name"
+    t.string   "codename",   :limit => 3
+    t.datetime "created_at",              :null => false
+    t.datetime "updated_at",              :null => false
+  end
+
+  create_table "supply_sites", :force => true do |t|
+    t.integer  "site_id"
+    t.float    "supply_quantity"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+  end
+
+  create_table "translinks", :force => true do |t|
+    t.integer  "supply_site_id"
+    t.integer  "demand_site_id"
+    t.float    "unit_cost"
+    t.float    "transport_quantity"
+    t.datetime "created_at",         :null => false
+    t.datetime "updated_at",         :null => false
+  end
 
   create_table "users", :force => true do |t|
     t.string   "name"

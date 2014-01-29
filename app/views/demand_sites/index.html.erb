@@ -1,0 +1,29 @@
+<h1>Data of Demand Sites</h1>
+
+<table class="table">
+  <tr>
+    <th>Code</th>
+    <th>Site</th>
+    <th>Demand</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+  <% @demand_sites.each do |demand_site| %>
+      <tr>
+        <td><%= demand_site.site.codename %></td>
+        <td><%= demand_site.site.name %></td>
+        <td><%= best_in_place demand_site, :demand_quantity, :type => :input%></td>
+        <td><%= link_to 'Show', demand_site %></td>
+        <td><%= link_to 'Update', edit_demand_site_path(demand_site) %></td>
+        <td><%= link_to 'Destroy', demand_site, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+  <% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Demand Site', new_demand_site_path %> <br> <br>
+<%= link_to 'Back', current_user %>
+

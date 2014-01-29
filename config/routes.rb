@@ -1,6 +1,11 @@
 SampleApp::Application.routes.draw do
+
   resources :users
   resources :sessions, only: [:new, :create, :destroy]
+  resources :sites
+  resources :demand_sites
+  resources :supply_sites
+  resources :translinks
 
   root to: 'static_pages#home'
 
@@ -11,6 +16,10 @@ SampleApp::Application.routes.draw do
   match '/help', to: 'static_pages#help'
   match '/about', to: 'static_pages#about'
   match '/contact', to: 'static_pages#contact'
+
+  match 'translinks/optimize', :to => 'translinks#optimize'
+  match 'translinks/read_transportation_quantities', :to => 'translinks#read_transportation_quantities'
+  match 'translinks/delete_solution', :to => 'translinks#delete_solution'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

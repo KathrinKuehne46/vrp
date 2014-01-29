@@ -1,0 +1,405 @@
+GAMS 24.1.3  r41464 Released Jul 26, 2013 WEX-WEI x86_64/MS Windows                                                                                                                                                                    01/29/14 10:15:02 Page 1
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+C o m p i l a t i o n
+
+
+   1  * Einfachstes Transportmodell mit Links
+   2  * Autor: SH
+   3  * Stand: 26.11.2012
+   4   
+   5   
+   6  set  i Angebotsorte
+   7       j Nachfrageorte
+   8       l Link
+   9       LI(l,i),LJ(l,j);
+  10   
+  11  parameter
+  12       A(i)    Angebot
+  13       N(j)    Nachfrage
+  14       c(l)  Kosten des Transports von i nach j;
+  15   
+  16   
+INCLUDE    C:\Sites\rails_projects\OM_Apps\Transportmodell_v3_Input_Instanz1.inc
+  18  set i /
+  19  i1
+  20  i2
+  21  i3
+  22  /
+  23   
+  24  j /
+  25  j1
+  26  j2
+  27  j3
+  28  j4
+  29  /
+  30   
+  31  l /
+  32  l1
+  33  l2
+  34  l3
+  35  l4
+  36  l5
+  37  l6
+  38  l7
+  39  l8
+  40  l9
+  41  l10
+  42  l11
+  43  l12
+  44  /;
+  45   
+  46  LI(l,i) = no;
+  47  LJ(l,j) = no;
+  48   
+  49  LI( 'l1', 'i1') = yes;
+  50  LJ( 'l1', 'j1') = yes;
+  51   
+  52  LI( 'l2', 'i1') = yes;
+  53  LJ( 'l2', 'j2') = yes;
+GAMS 24.1.3  r41464 Released Jul 26, 2013 WEX-WEI x86_64/MS Windows                                                                                                                                                                    01/29/14 10:15:02 Page 2
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+C o m p i l a t i o n
+
+
+  54   
+  55  LI( 'l3', 'i1') = yes;
+  56  LJ( 'l3', 'j3') = yes;
+  57   
+  58  LI( 'l4', 'i1') = yes;
+  59  LJ( 'l4', 'j4') = yes;
+  60   
+  61  LI( 'l5', 'i2') = yes;
+  62  LJ( 'l5', 'j1') = yes;
+  63   
+  64  LI( 'l6', 'i2') = yes;
+  65  LJ( 'l6', 'j2') = yes;
+  66   
+  67  LI( 'l7', 'i2') = yes;
+  68  LJ( 'l7', 'j3') = yes;
+  69   
+  70  LI( 'l8', 'i2') = yes;
+  71  LJ( 'l8', 'j4') = yes;
+  72   
+  73  LI( 'l9', 'i3') = yes;
+  74  LJ( 'l9', 'j1') = yes;
+  75   
+  76  LI( 'l10', 'i3') = yes;
+  77  LJ( 'l10', 'j2') = yes;
+  78   
+  79  LI( 'l11', 'i3') = yes;
+  80  LJ( 'l11', 'j3') = yes;
+  81   
+  82  LI( 'l12', 'i3') = yes;
+  83  LJ( 'l12', 'j4') = yes;
+  84   
+  85   
+  86   
+  87  Parameter
+  88    A(i) /
+  89  i1  20.0
+  90  i2  25.0
+  91  i3  21.0
+  92  /
+  93   
+  94   
+  95  N(j) /
+  96  j1  15.0
+  97  j2  17.0
+  98  j3  22.0
+  99  j4  12.0
+ 100  /
+ 101   
+ 102   
+ 103  c(l) /
+ 104  l1  6.0
+ 105  l2  2.0
+ 106  l3  6.0
+GAMS 24.1.3  r41464 Released Jul 26, 2013 WEX-WEI x86_64/MS Windows                                                                                                                                                                    01/29/14 10:15:02 Page 3
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+C o m p i l a t i o n
+
+
+ 107  l4  7.0
+ 108  l5  4.0
+ 109  l6  9.0
+ 110  l7  5.0
+ 111  l8  3.0
+ 112  l9  8.0
+ 113  l10  8.0
+ 114  l11  1.0
+ 115  l12  6.0
+ 116  /
+ 117   
+ 118  ;
+ 119   
+ 120  variables Z  Zielfunktionswert;
+ 121  positive variables x Transportmengen;
+ 122   
+ 123  Equations
+ 124  Zielfunktion         Das ist die Zielfunktion
+ 125  Angebot_einhalten(i)   Das Angebot darf nicht überschritten werden
+ 126  Nachfrage_decken(j)  Die Nachfrage muss befriedigt werden;
+ 127   
+ 128  Zielfunktion..
+ 129       Z =e=   sum(l,c(l)*x(l));
+ 130   
+ 131  Angebot_einhalten(i)..
+ 132       sum(l$LI(l,i), x(l)) =l= A(i);
+ 133   
+ 134  Nachfrage_decken(j)..
+ 135       sum(l$LJ(l,j), x(l)) =g= N(j);
+ 136   
+ 137  model transportv1 /
+ 138                   Zielfunktion
+ 139                   , Angebot_einhalten
+ 140                   , Nachfrage_decken
+ 141                   /;
+ 142   
+ 143   
+ 144  display A, N, c;
+ 145   
+ 146  solve transportv1 minimizing Z using lp;
+ 147   
+ 148  display x.l;
+ 149   
+ 150   
+ 151  file outputfile1 / 'Transportmengen_v2.txt'/;
+ 152  put outputfile1;
+ 153   
+ 154  put 'Zielfunktionswert:  ',z.l /
+ 155   
+ 156  loop(l,
+ 157       loop(i$LI(l,i),
+ 158           loop(j$LJ(l,j),
+ 159               put l.tl:0, ' ; ' i.tl:0, ' ; ' j.tl:0, ' ; ', x.l(l) /
+GAMS 24.1.3  r41464 Released Jul 26, 2013 WEX-WEI x86_64/MS Windows                                                                                                                                                                    01/29/14 10:15:02 Page 4
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+C o m p i l a t i o n
+
+
+ 160           );
+ 161       );
+ 162  );
+ 163   
+ 164  putclose outputfile1;
+ 165   
+ 166   
+EXIT C:\Sites\rails_projects\OM_Apps\Transportmodell_v2.gms
+GAMS 24.1.3  r41464 Released Jul 26, 2013 WEX-WEI x86_64/MS Windows                                                                                                                                                                    01/29/14 10:15:02 Page 5
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Include File Summary
+
+
+   SEQ   GLOBAL TYPE      PARENT   LOCAL  FILENAME
+
+     1        1 INPUT          0       0  C:\Sites\rails_projects\OM_Apps\Transportmodell_v2.gms
+     2       17 INCLUDE        1      17  .C:\Sites\rails_projects\OM_Apps\Transportmodell_v3_Input_Instanz1.inc
+     3      167 EXIT           1      66  C:\Sites\rails_projects\OM_Apps\Transportmodell_v2.gms
+
+
+COMPILATION TIME     =        0.000 SECONDS      3 MB  24.1.3 r41464 WEX-WEI
+GAMS 24.1.3  r41464 Released Jul 26, 2013 WEX-WEI x86_64/MS Windows                                                                                                                                                                    01/29/14 10:15:02 Page 6
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+E x e c u t i o n
+
+
+----    144 PARAMETER A  Angebot
+
+i1 20.000,    i2 25.000,    i3 21.000
+
+
+----    144 PARAMETER N  Nachfrage
+
+j1 15.000,    j2 17.000,    j3 22.000,    j4 12.000
+
+
+----    144 PARAMETER c  Kosten des Transports von i nach j
+
+l1  6.000,    l2  2.000,    l3  6.000,    l4  7.000,    l5  4.000,    l6  9.000,    l7  5.000,    l8  3.000,    l9  8.000,    l10 8.000,    l11 1.000,    l12 6.000
+
+GAMS 24.1.3  r41464 Released Jul 26, 2013 WEX-WEI x86_64/MS Windows                                                                                                                                                                    01/29/14 10:15:02 Page 7
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Equation Listing    SOLVE transportv1 Using LP From line 146
+
+
+---- Zielfunktion  =E=  Das ist die Zielfunktion
+
+Zielfunktion..  Z - 6*x(l1) - 2*x(l2) - 6*x(l3) - 7*x(l4) - 4*x(l5) - 9*x(l6) - 5*x(l7) - 3*x(l8) - 8*x(l9) - 8*x(l10) - x(l11) - 6*x(l12) =E= 0 ; (LHS = 0)
+     
+
+---- Angebot_einhalten  =L=  Das Angebot darf nicht überschritten werden
+
+Angebot_einhalten(i1)..  x(l1) + x(l2) + x(l3) + x(l4) =L= 20 ; (LHS = 0)
+     
+Angebot_einhalten(i2)..  x(l5) + x(l6) + x(l7) + x(l8) =L= 25 ; (LHS = 0)
+     
+Angebot_einhalten(i3)..  x(l9) + x(l10) + x(l11) + x(l12) =L= 21 ; (LHS = 0)
+     
+
+---- Nachfrage_decken  =G=  Die Nachfrage muss befriedigt werden
+
+Nachfrage_decken(j1)..  x(l1) + x(l5) + x(l9) =G= 15 ; (LHS = 0, INFES = 15 ****)
+     
+Nachfrage_decken(j2)..  x(l2) + x(l6) + x(l10) =G= 17 ; (LHS = 0, INFES = 17 ****)
+     
+Nachfrage_decken(j3)..  x(l3) + x(l7) + x(l11) =G= 22 ; (LHS = 0, INFES = 22 ****)
+     
+REMAINING ENTRY SKIPPED
+
+GAMS 24.1.3  r41464 Released Jul 26, 2013 WEX-WEI x86_64/MS Windows                                                                                                                                                                    01/29/14 10:15:02 Page 8
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Column Listing      SOLVE transportv1 Using LP From line 146
+
+
+---- Z  Zielfunktionswert
+
+Z
+                (.LO, .L, .UP, .M = -INF, 0, +INF, 0)
+        1       Zielfunktion
+
+
+---- x  Transportmengen
+
+x(l1)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+       -6       Zielfunktion
+        1       Angebot_einhalten(i1)
+        1       Nachfrage_decken(j1)
+
+x(l2)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+       -2       Zielfunktion
+        1       Angebot_einhalten(i1)
+        1       Nachfrage_decken(j2)
+
+x(l3)
+                (.LO, .L, .UP, .M = 0, 0, +INF, 0)
+       -6       Zielfunktion
+        1       Angebot_einhalten(i1)
+        1       Nachfrage_decken(j3)
+
+REMAINING 9 ENTRIES SKIPPED
+GAMS 24.1.3  r41464 Released Jul 26, 2013 WEX-WEI x86_64/MS Windows                                                                                                                                                                    01/29/14 10:15:02 Page 9
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Model Statistics    SOLVE transportv1 Using LP From line 146
+
+
+MODEL STATISTICS
+
+BLOCKS OF EQUATIONS           3     SINGLE EQUATIONS            8
+BLOCKS OF VARIABLES           2     SINGLE VARIABLES           13
+NON ZERO ELEMENTS            37
+
+
+GENERATION TIME      =        0.032 SECONDS      4 MB  24.1.3 r41464 WEX-WEI
+
+
+EXECUTION TIME       =        0.047 SECONDS      4 MB  24.1.3 r41464 WEX-WEI
+GAMS 24.1.3  r41464 Released Jul 26, 2013 WEX-WEI x86_64/MS Windows                                                                                                                                                                   01/29/14 10:15:02 Page 10
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Solution Report     SOLVE transportv1 Using LP From line 146
+
+
+               S O L V E      S U M M A R Y
+
+     MODEL   transportv1         OBJECTIVE  Z
+     TYPE    LP                  DIRECTION  MINIMIZE
+     SOLVER  CPLEX               FROM LINE  146
+
+**** SOLVER STATUS     1 Normal Completion         
+**** MODEL STATUS      1 Optimal                   
+**** OBJECTIVE VALUE              161.0000
+
+ RESOURCE USAGE, LIMIT          0.031      1000.000
+ ITERATION COUNT, LIMIT         6    2000000000
+
+IBM ILOG CPLEX   24.1.3 r41464 Released Jul 26, 2013 WEI x86_64/MS Windows    
+Cplex 12.5.1.0
+
+LP status(1): optimal
+Cplex Time: 0.00sec (det. 0.02 ticks)
+Optimal solution found.
+Objective :         161.000000
+
+
+                           LOWER          LEVEL          UPPER         MARGINAL
+
+---- EQU Zielfunkt~          .              .              .             1.0000      
+
+  Zielfunktion  Das ist die Zielfunktion
+
+---- EQU Angebot_einhalten  Das Angebot darf nicht überschritten werden
+
+          LOWER          LEVEL          UPPER         MARGINAL
+
+i1        -INF           20.0000        20.0000          .          
+i2        -INF           25.0000        25.0000        -2.0000      
+i3        -INF           21.0000        21.0000        -5.0000      
+
+---- EQU Nachfrage_decken  Die Nachfrage muss befriedigt werden
+
+          LOWER          LEVEL          UPPER         MARGINAL
+
+j1        15.0000        15.0000        +INF            6.0000      
+j2        17.0000        17.0000        +INF            2.0000      
+j3        22.0000        22.0000        +INF            6.0000      
+j4        12.0000        12.0000        +INF            5.0000      
+
+                           LOWER          LEVEL          UPPER         MARGINAL
+
+---- VAR Z                 -INF          161.0000        +INF             .          
+
+  Z  Zielfunktionswert
+GAMS 24.1.3  r41464 Released Jul 26, 2013 WEX-WEI x86_64/MS Windows                                                                                                                                                                   01/29/14 10:15:02 Page 11
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+Solution Report     SOLVE transportv1 Using LP From line 146
+
+
+---- VAR x  Transportmengen
+
+           LOWER          LEVEL          UPPER         MARGINAL
+
+l1           .             2.0000        +INF             .          
+l2           .            17.0000        +INF             .          
+l3           .             1.0000        +INF             .          
+l4           .              .            +INF            2.0000      
+l5           .            13.0000        +INF             .          
+l6           .              .            +INF            9.0000      
+l7           .              .            +INF            1.0000      
+l8           .            12.0000        +INF             .          
+l9           .              .            +INF            7.0000      
+l10          .              .            +INF           11.0000      
+l11          .            21.0000        +INF             .          
+l12          .              .            +INF            6.0000      
+
+
+**** REPORT SUMMARY :        0     NONOPT
+                             0 INFEASIBLE
+                             0  UNBOUNDED
+GAMS 24.1.3  r41464 Released Jul 26, 2013 WEX-WEI x86_64/MS Windows                                                                                                                                                                   01/29/14 10:15:02 Page 12
+G e n e r a l   A l g e b r a i c   M o d e l i n g   S y s t e m
+E x e c u t i o n
+
+
+----    148 VARIABLE x.L  Transportmengen
+
+l1   2.000,    l2  17.000,    l3   1.000,    l5  13.000,    l8  12.000,    l11 21.000
+
+
+**** REPORT FILE SUMMARY
+
+outputfile1 C:\Sites\rails_projects\OM_Apps\Transportmengen_v2.txt
+
+
+EXECUTION TIME       =        0.015 SECONDS      3 MB  24.1.3 r41464 WEX-WEI
+
+
+USER: Lehrstuhl fuer Produktionswirtschaft           S130221:0333AN-GEN
+      Leibniz University Hannover                                DC8871
+      License for teaching and research at degree granting institutions
+
+
+**** FILE SUMMARY
+
+Input      C:\Sites\rails_projects\OM_Apps\Transportmodell_v2.gms
+Output     C:\Sites\rails_projects\OM_Apps\Transportmodell_v2.lst

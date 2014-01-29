@@ -9,3 +9,21 @@
     </section>
   </aside>
 </div>
+
+<% if signed_in? %>
+<p>
+  Solve Transportation Problem!    <br>     <br>
+
+  <%= link_to "Update Sites!", sites_path %><br>
+  <%= link_to "Update Demand Sites!", demand_sites_path %><br>
+  <%= link_to "Update Supply Sites!", supply_sites_path %><br>
+  <%= link_to "Update Translinks!", translinks_path %><br>
+  <%= button_to "Destroy Solution", {:controller => 'translinks',  :action =>  'delete_solution'}, confirm: 'Are you sure?' %>
+  <%= button_to "Solve Transport", :controller => 'translinks', :action =>  'optimize'  %>
+  <%= button_to "Read Solution", :controller => 'translinks', :action =>  'read_transportation_quantities'%>
+
+
+</p>
+
+
+<% end %>

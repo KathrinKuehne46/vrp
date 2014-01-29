@@ -1,0 +1,30 @@
+<div class="row">
+  <div class="span6 offset3">
+<%= form_for(@supply_site) do |f| %>
+    <% if @supply_site.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@supply_site.errors.count, "error") %> prohibited this supply site from being saved:</h2>
+
+          <ul>
+            <% @supply_site.errors.full_messages.each do |msg| %>
+                <li><%= msg %></li>
+            <% end %>
+          </ul>
+        </div>
+    <% end %>
+
+    <div class="field selectbox">
+      <%= f.label 'Select Code' %><br />
+      <%= f.collection_select :site_id, Site.all, :id, :codename %>
+    </div>
+    <div class="field">
+      <%= f.label 'Supply Quantity' %><br />
+      <%= f.text_field :supply_quantity %>
+    </div>
+    <div class="actions">
+      <%= f.submit "Save Supply Side" %>
+    </div>
+<% end %>
+  </div>
+</div>
+

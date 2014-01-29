@@ -1,0 +1,28 @@
+<h1>Data of Supply Sites</h1>
+
+<table class="table">
+  <tr>
+    <th>Code</th>
+    <th>Site</th>
+    <th>Supply Quantity</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+  <% @supply_sites.each do |supply_site| %>
+      <tr>
+        <td><%= supply_site.site.codename %></td>
+        <td><%= supply_site.site.name %></td>
+        <td><%= supply_site.supply_quantity %></td>
+        <td><%= link_to 'Show', supply_site %></td>
+        <td><%= link_to 'Change', edit_supply_site_path(supply_site) %></td>
+        <td><%= link_to 'Destroy', supply_site, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+  <% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Supply Site', new_supply_site_path %><br>  <br>
+<%= link_to 'Back', current_user %>

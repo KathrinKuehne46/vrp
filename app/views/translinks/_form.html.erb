@@ -1,0 +1,35 @@
+<div class="row">
+  <div class="span6 offset3">
+<%= form_for(@translink) do |f| %>
+    <% if @translink.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@translink.errors.count, "error") %> prohibited this translink from being saved:</h2>
+
+          <ul>
+            <% @translink.errors.full_messages.each do |msg| %>
+                <li><%= msg %></li>
+            <% end %>
+          </ul>
+        </div>
+    <% end %>
+
+    <div class="field">
+      <%= f.label 'Supply Site' %><br />
+      <%= f.collection_select :supply_site_id, SupplySite.all, :id, :supply_site_codename %>
+
+    </div>
+    <div class="field">
+      <%= f.label 'Demand Site' %><br />
+      <%= f.collection_select :demand_site_id, DemandSite.all, :id, :demand_site_codename %>
+    </div>
+    <div class="field">
+      <%= f.label 'Transportation Cost' %><br />
+      <%= f.text_field :unit_cost %>
+    </div>
+    <div class="actions">
+      <%= f.submit'Save or Update Translink' %>
+    </div>
+<% end %>
+  </div>
+</div>
+

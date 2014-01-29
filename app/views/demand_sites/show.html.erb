@@ -1,0 +1,20 @@
+<!--<p id="notice"><%= notice %></p>-->
+
+<p>
+  <b>Demand Site (Code):</b>
+  <%= @demand_site.site.codename %>
+</p>
+
+<p>
+  <b>Demand Site:</b>
+  <%= @demand_site.site.name %>
+</p>
+
+<p>
+  <b>Demand:</b>
+  <%= @demand_site.demand_quantity %>
+</p>
+
+
+<%= link_to 'Update', edit_demand_site_path(@demand_site) %> <br><br>
+<%= link_to 'Back', demand_sites_path %>

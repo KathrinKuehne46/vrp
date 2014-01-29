@@ -1,0 +1,39 @@
+<h1>Data of Translinks</h1>
+
+<% if @objective_function_value!=nil %>
+    Objective function value: <b><%=   @objective_function_value %></b><br>   <br>   <br>
+<% end %>
+
+<table class="table">
+  <tr>
+    <th>Supply Site</th>
+    <th>Demand Site</th>
+    <th>Transportation cost</th>
+    <th>Transport Quantity</th>
+    <th></th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+  <% @translinks.each do |translink| %>
+      <tr>
+        <td><%= translink.supply_site.site.codename %></td>
+        <td><%= translink.demand_site.site.codename %></td>
+        <td><%= translink.unit_cost %></td>
+        <td><%= translink.transport_quantity %></td>
+        <td><%= link_to 'Show', translink %></td>
+        <td><%= link_to 'Change', edit_translink_path(translink) %></td>
+        <td><%= link_to 'Destroy', translink, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+  <% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Transportlink', new_translink_path %><br>  <br>
+<%= link_to 'Back', current_user %>
+
+
+
+

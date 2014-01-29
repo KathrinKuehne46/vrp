@@ -1,0 +1,25 @@
+<!--<p id="notice"><%= notice %></p>-->
+
+<p>
+  <b>Supply Site</b>
+  <%= @supply_site_name  %>
+</p>
+
+<p>
+  <b>Demand Site</b>
+  <%= @demand_site_name %>
+</p>
+
+<p>
+  <b>Transportation Costs</b>
+  <%= @translink.unit_cost %>
+</p>
+
+<p>
+  <b>Transportation Quantity</b>
+  <%= @translink.transport_quantity %>
+</p>
+
+
+<%= link_to 'Change', edit_translink_path(@translink) %> <br><br>
+<%= link_to 'Back', translinks_path %>
