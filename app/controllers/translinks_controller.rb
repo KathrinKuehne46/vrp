@@ -67,6 +67,7 @@ class TranslinksController < ApplicationController
   end
 
 
+
   def optimize
     if File.exist?("Transportmodell_v3_Input_Instanz1.inc")
       File.delete("Transportmodell_v3_Input_Instanz1.inc")
