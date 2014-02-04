@@ -18,6 +18,6 @@ class Site < ActiveRecord::Base
   has_many :demand_sites, :dependent => :destroy
   has_many :translinks, :through => :demand_sites
   has_many :translinks, :through => :supply_sites
-  accepts_nested_attributes_for :supply_sites
-  accepts_nested_attributes_for :demand_sites
+#  accepts_nested_attributes_for :supply_sites
+#  accepts_nested_attributes_for :demand_sites
 end

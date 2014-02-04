@@ -146,6 +146,7 @@ class TranslinksController < ApplicationController
         al.save
       }
       fi.close
+
       @translinks = Translink.all
 
       render "translinks/index"

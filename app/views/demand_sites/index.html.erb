@@ -14,7 +14,7 @@
       <tr>
         <td><%= demand_site.site.codename %></td>
         <td><%= demand_site.site.name %></td>
-        <td><%= best_in_place demand_site, :demand_quantity, :type => :input%></td>
+        <td><%= best_in_place demand_site, :demand_quantity, :type => :input %></td>
         <td><%= link_to 'Show', demand_site %></td>
         <td><%= link_to 'Update', edit_demand_site_path(demand_site) %></td>
         <td><%= link_to 'Destroy', demand_site, method: :delete, data: { confirm: 'Are you sure?' } %></td>
